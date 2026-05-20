@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Produto</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+
+    <main class="main-content">
+        <h1>Detalhes do Produto</h1>
+        <div>
+            <p><strong>ID:</strong> <span th:text="${produto.id}"></span></p>
+            <p><strong>Nome:</strong> <span th:text="${produto.nome}"></span></p>
+            <p><strong>Quantidade:</strong> <span th:text="${produto.quantidade}"></span></p>
+            <p><strong>Valor: R$ </strong> <span th:text="${produto.valor}"></span></p>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <a th:href="@{/produtos/listar}" class="botao">Voltar</a>
+            
+            <form th:action="@{/produtos/{id}/excluir(id=${produto.id})}" method="post" style="display:inline;">
+                <button type="submit" class="botao" style="background-color: red; color: white;">Excluir</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

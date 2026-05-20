@@ -1,7 +1,6 @@
 package com.example.projeto.controller;
 
 import jakarta.validation.Valid;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,13 +23,11 @@ public class PessoaWebController {
         this.pessoaService = pessoaService;
     }
 
-    // Mapeia GET /pessoas → redireciona para /pessoas/listar
     @GetMapping
     public String index() {
         return "redirect:/pessoas/listar";
     }
 
-    // 1. Página de cadastro
     @GetMapping("/cadastrar")
     public String exibirFormCadastro(Model model) {
         model.addAttribute("pessoa", new Pessoa());
@@ -44,7 +41,6 @@ public class PessoaWebController {
             RedirectAttributes ra) {
 
         if (result.hasErrors()) {
-            // repopula o objeto no formulário em caso de erro
             return "pessoas/form";
         }
         pessoaService.salvarPessoa(pessoa);
@@ -52,14 +48,12 @@ public class PessoaWebController {
         return "redirect:/pessoas/listar";
     }
 
-    // 2. Página de listagem
     @GetMapping("/listar")
     public String listarPessoas(Model model) {
         model.addAttribute("lista", pessoaService.listarPessoas());
         return "pessoas/lista";
     }
 
-    // 3. Detalhes e exclusão
     @GetMapping("/{id}")
     public String detalhesPessoa(@PathVariable Long id, Model model) {
         Pessoa p = pessoaService.buscarPorId(id)
@@ -74,6 +68,33 @@ public class PessoaWebController {
     public String excluirPessoa(@PathVariable Long id, RedirectAttributes ra) {
         pessoaService.deletarPessoa(id);
         ra.addFlashAttribute("success", "Pessoa excluída com sucesso!");
+        return "redirect:/pessoas/listar";
+    }
+
+    // NOVO: Exibir formulário de edição pré-preenchido
+    @GetMapping("/{id}/editar")
+    public String exibirFormEdicao(@PathVariable Long id, Model model) {
+        Pessoa p = pessoaService.buscarPorId(id)
+            .orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Pessoa não encontrada, id: " + id
+            ));
+        model.addAttribute("pessoa", p);
+        return "pessoas/form";
+    }
+
+    // NOVO: Processar a atualização dos dados da pessoa
+    @PostMapping("/{id}/editar")
+    public String editarPessoa(
+            @PathVariable Long id,
+            @Valid @ModelAttribute("pessoa") Pessoa pessoaAtualizada,
+            BindingResult result,
+            RedirectAttributes ra) {
+
+        if (result.hasErrors()) {
+            return "pessoas/form";
+        }
+        pessoaService.atualizarPessoa(id, pessoaAtualizada);
+        ra.addFlashAttribute("success", "Pessoa atualizada com sucesso!");
         return "redirect:/pessoas/listar";
     }
 }

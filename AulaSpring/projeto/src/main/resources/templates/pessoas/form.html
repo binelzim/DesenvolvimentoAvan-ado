@@ -1,38 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <title>Cadastrar Pessoa</title>
+    <title th:text="${pessoa.id == null ? 'Cadastrar Pessoa' : 'Editar Pessoa'}">Formulário de Pessoa</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-
 <body>
-    <!-- navbar -->
     <div th:replace="fragments/navbar :: navbar"></div>
 
-    <!-- conteúdo principal -->
     <main class="main-content">
-        <h1>Cadastrar Pessoa</h1>
-        <form th:action="@{/pessoas/cadastrar}" th:object="${pessoa}" method="post">
+        <h1 th:text="${pessoa.id == null ? 'Cadastrar Pessoa' : 'Editar Pessoa'}">Formulário</h1>
+        
+        <form th:action="${pessoa.id == null ? '/pessoas/cadastrar' : '/pessoas/' + pessoa.id + '/editar'}" th:object="${pessoa}" method="post">
+            
+            <input type="hidden" th:field="*{id}" />
+
             <div>
                 <label>Nome:</label>
-                <input type="text" th:field="*{nome}" placeholder="Nome completo" />
+                <input type="text" th:field="*{nome}" placeholder="Nome completo" required />
                 <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
             </div>
             <div>
                 <label>Idade:</label>
-                <input type="number" th:field="*{idade}" />
+                <input type="number" th:field="*{idade}" required />
                 <div th:if="${#fields.hasErrors('idade')}" th:errors="*{idade}"></div>
             </div>
             <button type="submit" class="botao">Salvar</button>
         </form>
     </main>
 
-    <!-- footer opcional -->
     <footer>
         <p>(c) 2025 Meu App</p>
     </footer>
 </body>
-
 </html>

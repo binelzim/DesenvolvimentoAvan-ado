@@ -1,16 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <title>Lista de Pessoas</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-
 <body>
     <div th:replace="fragments/navbar :: navbar"></div>
 
-    <!-- conteúdo principal -->
     <main class="main-content">
         <h1>Lista de Pessoas</h1>
         <table>
@@ -28,17 +25,16 @@
                     <td th:text="${pessoa.nome}"></td>
                     <td th:text="${pessoa.idade}"></td>
                     <td>
-                        <a th:href="@{/pessoas/{id}(id=${pessoa.id})}" class="botao">Detalhes</a>
+                        <a th:href="@{/pessoas/{id}/editar(id=${pessoa.id})}" class="botao" style="background-color: #f39c12;">Editar</a>
+                        <a th:href="@{/pessoas/{id}(id=${pessoa.id})}" class="botao" style="background-color: #34495e;">Detalhes</a>
                     </td>
                 </tr>
             </tbody>
         </table>
     </main>
 
-    <!-- footer opcional -->
     <footer>
         <p>(c) 2025 Meu App</p>
     </footer>
 </body>
-
 </html>
